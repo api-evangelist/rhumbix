@@ -1,0 +1,174 @@
+swagger: '2.0'
+info:
+  version: 1.0.1
+  description: "The Rhumbix API is intended for use by Rhumbix customers and partners to build integrations with the Rhumbix application. The API is designed to support regular updates and queries in batch requests. Rhumbix primarily manages data for construction workers in the field. Integrations should be aware that updates to this data will directly influence the users of the mobile and web application. For access to the API, contact your Rhumbix support representitive. Further application documentation and support can be found at https://rhumbix.desk.com/ \n## Overview\nThe usual order of operation is like this: \n1) You post data to the API with your unique company_key and x-api-key. \n2) The request is put into a queue of requests (sometimes requests are very large) and you receive back a batch_key to check the status of your request. \n3) You check the unique URL of your request using your new batch_key, your company_key and x-api-key until its status is COMPLETE. \n### Base URL \nhttps://async-api.rhumbix.com/V1_0_1\n# Authentication\nAuthentication is handled via a token system and a unique company_key. You can create a company_key and retrieve an api token key by logging in to the Rhumbix web platform. Once you have an access token, you can interact with the API by including the `x-api-key` in the header of an HTTP `GET` or `POST` request.\n```json\n{\n  \"x-api-key\": \"abcdefghijklmnopqrstuvwxyz0123456789\" \n}\n```"
+  x-logo:
+    url: https://s3.amazonaws.com/rmbx-export-assets/rmbx_horizontal_logo_colored.png
+  title: Rhumbix Public Batch Export CORS API
+host: async-api.rhumbix.com
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- externalDocs:
+    url: https://www.w3.org/TR/cors/
+  name: CORS
+  description: Returns appropriate headers to enable CORS for cross-domain API requests
+paths:
+  /{company_key}/batch/employee/import:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchEmployeeImportOptions
+  /{company_key}/batch/workshift/export/{batch_key}/status:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchWorkshiftExportStatusOptions
+  /{company_key}/batch/workshift/export/{batch_key}/results:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchWorkshiftResultsOptions
+  /{company_key}/batch/workshift/export:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchWorkshiftExportOptions
+  /{company_key}/batch/project/import:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchProjectImportOptions
+  /{company_key}/batch/employee/import/{batch_key}/status:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchEmployeeImportStatusOptions
+  /{company_key}/batch/project/import/{batch_key}/status:
+    options:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+            Access-Control-Allow-Methods:
+              type: string
+            Access-Control-Allow-Headers:
+              type: string
+          description: ok
+      produces:
+      - application/json
+      tags:
+      - CORS
+      summary: Returns appropriate headers to enable CORS for cross-domain API requests
+      consumes:
+      - application/json
+      operationId: batchProjectImportStatusOptions
+securityDefinitions:
+  api_key:
+    in: header
+    type: apiKey
+    example: abcdefghijklmnopqrstuvwxyz0123456789
+    name: x-api-key
+  RMBXApiAuthorizer:
+    example: abcdefghijklmnopqrstuvwxyz0123456789
+    type: apiKey
+    name: x-api-key
+    in: header
+x-servers:
+- url: //async-api.rhumbix.com/V1_0_1
+  description: Server URL

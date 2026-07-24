@@ -1,0 +1,433 @@
+swagger: '2.0'
+info:
+  version: 1.0.1
+  description: "The Rhumbix API is intended for use by Rhumbix customers and partners to build integrations with the Rhumbix application. The API is designed to support regular updates and queries in batch requests. Rhumbix primarily manages data for construction workers in the field. Integrations should be aware that updates to this data will directly influence the users of the mobile and web application. For access to the API, contact your Rhumbix support representitive. Further application documentation and support can be found at https://rhumbix.desk.com/ \n## Overview\nThe usual order of operation is like this: \n1) You post data to the API with your unique company_key and x-api-key. \n2) The request is put into a queue of requests (sometimes requests are very large) and you receive back a batch_key to check the status of your request. \n3) You check the unique URL of your request using your new batch_key, your company_key and x-api-key until its status is COMPLETE. \n### Base URL \nhttps://async-api.rhumbix.com/V1_0_1\n# Authentication\nAuthentication is handled via a token system and a unique company_key. You can create a company_key and retrieve an api token key by logging in to the Rhumbix web platform. Once you have an access token, you can interact with the API by including the `x-api-key` in the header of an HTTP `GET` or `POST` request.\n```json\n{\n  \"x-api-key\": \"abcdefghijklmnopqrstuvwxyz0123456789\" \n}\n```"
+  x-logo:
+    url: https://s3.amazonaws.com/rmbx-export-assets/rmbx_horizontal_logo_colored.png
+  title: Rhumbix Public Batch Export Batch Import API
+host: async-api.rhumbix.com
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+tags:
+- name: Batch Import
+  description: Import Data into Rhumbix
+paths:
+  /{company_key}/batch/employee/import:
+    post:
+      description: Post a new batch of employee data for import into Rhumbix. Returns a new batch_key for subsequently retrieving status updates for this batch.
+      parameters:
+      - description: The unique company key associated with your api key.
+        required: true
+        type: string
+        name: company_key
+        in: path
+      - description: An object that contains employee data that you would like to import into Rhumbix.
+        required: true
+        in: body
+        name: batch_request
+        schema:
+          items:
+            $ref: '#/definitions/Employee'
+          type: array
+          example:
+          - first_name: Tom
+            last_name: Tomson
+            company_supplied_id: TOM01
+            classification: apprentice
+            is_active: true
+            user_role: WORKER
+            trade: carpenter
+            phone: '9876543210'
+            project_job_numbers:
+            - '73617665666572726973'
+            email: tomt@company.com
+          - first_name: John
+            last_name: Johnson
+            company_supplied_id: JON02
+            classification: ''
+            is_active: true
+            user_role: FOREMAN
+            trade: ''
+            phone: '9876543211'
+            project_job_numbers:
+            - '73617665666572726973'
+            - '7468652064756465'
+            email: johnj@company.com
+          title: BatchEmployeeImportRequest
+      tags:
+      - Batch Import
+      summary: Employee Batch Data
+      security:
+      - RMBXApiAuthorizer: []
+      - api_key: []
+      operationId: batchEmployeeImport
+      x-code-samples:
+      - lang: Shell
+        source: "curl -X POST -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\n-d '[{\"company_supplied_id\": \"alexa\", \"user_role\": \"WORKER\", \n\"first_name\": \"Alex\", \"last_name\": \"Alexander\"}]' \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/employee/import\n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+      - lang: Python
+        source: "import requests\ndata = [\n    {\n        'company_supplied_id': 'alexa', \n        'user_role': 'WORKER', \n        'first_name': 'Alex', \n        'last_name': 'Alexander'\n    }\n]\n\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{}'\\\n      '/batch/employee/import'.format(company_key)\nresult = requests.post(url, headers=headers, json=data)\nprint result.json() \n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+          description: batch successfully posted
+          schema:
+            title: BatchEmployeeImportResponse
+            type: object
+            example:
+              batch_key: 1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90
+            properties:
+              batch_key:
+                $ref: '#/definitions/BatchKey'
+  /{company_key}/batch/project/import:
+    post:
+      description: Post a new batch of project data to import into Rhumbix. Returns the new batch_key for subsequently retrieving status updates for this batch.
+      parameters:
+      - description: The unique company key associated with your api key.
+        required: true
+        type: string
+        name: company_key
+        in: path
+      - description: "An object that contains project data that you would like to import into Rhumbix. \n\n**Unique Constraints:** _[ Project + Code ]_  \n\n\n\nThe CostCode field `code` muse be unique within a Project. Do not pass in multiples of the same code. `description` **_can_** be an empty string: \"\". \n```json\n# This will ERROR because there are two \"10-200\" codes.\n{\n    \"job_number\": \"JOB314\",\n    \"name\": \"Mission Impossible\",\n    \"cost_codes\": [\n        {\n            \"code\": \"10-200\",\n            \"description\": \"Conduit\",\n            \"units\": \"feet\",\n            \"is_active\": true\n        },\n        {\n            \"code\": \"10-200\",\n            \"description\": \"Electrical\",\n            \"units\": \"meters\",\n            \"is_active\": false\n        }\n    ]\n}\n```"
+        required: true
+        in: body
+        name: batch_request
+        schema:
+          items:
+            $ref: '#/definitions/Project'
+          type: array
+          example:
+          - status: INACTIVE
+            description: New Bowling Alley
+            cost_codes:
+            - code: 18-10048
+              group: '18'
+              description: Plumbing
+              is_active: true
+              erp_units: feet
+              units: percent complete
+            - units: ''
+              is_active: true
+              code: 18-10012
+              group: '18'
+              description: Heating
+            address: 5227 Santa Monica Boulevard, Los Angeles, CA 90029
+            job_number: '7468652064756465'
+            name: Hollywood Star Lanes
+          - status: ACTIVE
+            description: High End Restaurant where Abe Froman Eats.
+            cost_codes:
+            - units: ''
+              code: HF-669
+              is_active: true
+              description: Electrical Gear
+            - units: meters
+              code: HF-770
+              is_active: true
+              description: Platform Conduit
+            address: 22 W Schiller St, Chicago, IL 60610
+            job_number: '73617665666572726973'
+            name: Chez Quis
+          title: BatchProjectImportRequest
+      tags:
+      - Batch Import
+      summary: Project Batch Data
+      security:
+      - RMBXApiAuthorizer: []
+      - api_key: []
+      operationId: batchProjectImport
+      x-code-samples:
+      - lang: Shell
+        source: "curl -X POST -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\n-d '[{\"job_number\": \"7468652064756465\", \"name\": \"Hollywood Star Lanes\",\n\"address\": \"5227 Santa Monica Boulevard, Los Angeles, CA 90029\",\n\"cost_codes\": [{\"code\": \"18-10048\",\"description\": \"Plumbing\",\"units\": \n\"feet\"}, {\"code\": \"18-10012\",\"description\": \"Heating\",\"units\": \"\"}]}, \n{\"job_number\": \"73617665666572726973\",\"name\": \"Chez Quis\", \n\"description\": \"High End Restaurant where Abe Froman Eats.\", \n\"address\": \"22 W Schiller St, Chicago, IL 60610\",\"cost_codes\": []}]' \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/project/import\n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+      - lang: Python
+        source: "import requests\ndata = [\n    {\n        'job_number': '7468652064756465', \n        'name': 'Hollywood Star Lanes',\n        'description': '',\n        'address': '5227 Santa Monica Boulevard, Los Angeles, CA 90029',\n        'cost_codes': [\n            {\n                'code': '18-10048',\n                'description': 'Plumbing',\n                'units': 'feet'\n            },\n            {\n                'code': '18-10012',\n                'description': 'Heating',\n                'units': ''\n            }\n        ]\n    },\n    {\n        'job_number': '73617665666572726973',\n        'name': 'Chez Quis',\n        'description': 'High End Restaurant where Abe Froman Eats.',\n        'address': '22 W Schiller St, Chicago, IL 60610',\n        'cost_codes': []\n    }\n]\n\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{}'\\\n      '/batch/project/import'.format(company_key)\nresult = requests.post(url, headers=headers, json=data)\nprint result.json() \n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+          description: batch successfully posted
+          schema:
+            title: BatchProjectImportResponse
+            type: object
+            example:
+              batch_key: 1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90
+            properties:
+              batch_key:
+                $ref: '#/definitions/BatchKey'
+  /{company_key}/batch/employee/import/{batch_key}/status:
+    get:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+          description: batch is PENDING (in-process) or COMPLETE
+          schema:
+            title: BatchEmployeeImportStatusResponse
+            required:
+            - status
+            type: object
+            example:
+              status: COMPLETE
+              errors:
+                ? ''
+                : company_supplied_id:
+                  - This field is required.
+                BOB123:
+                  phone:
+                  - This field must be unique.
+                  email:
+                  - This field must be unique.
+                LARRY6:
+                  project_job_numbers:
+                    non_existant_ProjectABC:
+                    - This job number does not exist.
+            properties:
+              status:
+                $ref: '#/definitions/BatchStatus'
+              employees:
+                items:
+                  $ref: '#/definitions/EmployeeImportStatus'
+                type: array
+        '403':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+          description: url does not exist yet but will when batch queues up
+          schema:
+            title: BatchStatusResponse
+            required:
+            - status
+            type: object
+            example:
+              status: ACCEPTED
+            properties:
+              status:
+                $ref: '#/definitions/BatchStatus'
+      parameters:
+      - required: true
+        type: string
+        name: company_key
+        in: path
+      - required: true
+        type: string
+        name: batch_key
+        in: path
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Batch Import
+      summary: Employee Import Status
+      security:
+      - RMBXApiAuthorizer: []
+      - api_key: []
+      operationId: batchEmployeeImportStatus
+      description: Retrieve the processing status of a employee import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is "Complete", the 'employees' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record in Rhumbix), CREATED (new record created in Rhumbix), or ERROR (check the 'details' property for more information on why the record was not created nor imported).  It is possible for some records to be created/updated succssfully while others fail.  Check the status on each row to ensure that every record was imported successfully or to handle errors appopriately.
+  /{company_key}/batch/project/import/{batch_key}/status:
+    get:
+      responses:
+        '200':
+          headers:
+            Access-Control-Allow-Origin:
+              type: string
+          description: batch is PENDING (in-process) or COMPLETE
+          schema:
+            title: BatchProjectImportStatusResponse
+            required:
+            - status
+            type: object
+            example:
+              status: COMPLETE
+              errors:
+                ? ''
+                : job_number:
+                  - This field may not be blank.
+                projectXYZ:
+                  cost_codes:
+                    ? ''
+                    : code:
+                      - This field may not be blank.
+            properties:
+              status:
+                $ref: '#/definitions/BatchStatus'
+              projects:
+                items:
+                  $ref: '#/definitions/ProjectImportStatus'
+                type: array
+        '403':
+          description: url does not exist yet but will when batch queues up
+          schema:
+            title: BatchStatusResponse
+            required:
+            - status
+            type: object
+            example:
+              status: ACCEPTED
+            properties:
+              status:
+                $ref: '#/definitions/BatchStatus'
+      parameters:
+      - required: true
+        type: string
+        name: company_key
+        in: path
+      - required: true
+        type: string
+        name: batch_key
+        in: path
+      produces:
+      - application/json
+      - application/xml
+      tags:
+      - Batch Import
+      summary: Project Import Status
+      security:
+      - RMBXApiAuthorizer: []
+      - api_key: []
+      operationId: batchProjectImportStatus
+      description: Retrieve the processing status of a project import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is "Complete", the 'projects' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record in Rhumbix), CREATED (new record created in Rhumbix), or ERROR (check the 'details' property for more information on why the record was not created nor imported).  It is possible for some records to be created/updated succssfully while others fail.  Check the status on each row to ensure that every record was imported successfully or to handle errors appopriately.
+definitions:
+  Project:
+    required:
+    - job_number
+    - name
+    type: object
+    properties:
+      status:
+        enum:
+        - INACTIVE
+        - ACTIVE
+        type: string
+      description:
+        type: string
+      cost_codes:
+        items:
+          required:
+          - code
+          - description
+          type: object
+          properties:
+            code:
+              type: string
+            group:
+              type: string
+            description:
+              type: string
+            is_active:
+              type: boolean
+            erp_units:
+              type: string
+              description: Units, as tracked from an accounting perspective (i.e. "sq ft")
+            units:
+              type: string
+              description: Units, as tracked from a field perspective (i.e. "percent complete")
+          title: CostCode
+        type: array
+      address:
+        type: string
+      job_number:
+        type: string
+      name:
+        type: string
+    title: Project
+  Employee:
+    required:
+    - company_supplied_id
+    type: object
+    properties:
+      first_name:
+        type: string
+      last_name:
+        type: string
+      company_supplied_id:
+        type: string
+        description: Unique id for each employee
+      classification:
+        type: string
+      is_active:
+        type: boolean
+      user_role:
+        enum:
+        - ADMIN
+        - FOREMAN
+        - PM
+        - WORKER
+        - OFFICE_STAFF
+        type: string
+      trade:
+        type: string
+      phone:
+        type: string
+      project_job_numbers:
+        items:
+          type: string
+        type: array
+      email:
+        type: string
+    title: Employee
+  ProjectImportStatus:
+    title: ProjectImportStatus
+    required:
+    - job_number
+    properties:
+      job_number:
+        type: string
+    allOf:
+    - $ref: '#/definitions/ImportStatus'
+    - type: object
+  EmployeeImportStatus:
+    title: EmployeeImportStatus
+    required:
+    - company_supplied_id
+    properties:
+      company_supplied_id:
+        type: string
+    allOf:
+    - $ref: '#/definitions/ImportStatus'
+    - type: object
+  BatchKey:
+    type: string
+    title: BatchKey
+  ImportStatus:
+    required:
+    - status
+    properties:
+      status:
+        enum:
+        - PENDING
+        - CREATED
+        - UPDATED
+        - ERROR
+        type: string
+      detail:
+        type: string
+  BatchStatus:
+    enum:
+    - NOT_FOUND
+    - ACCEPTED
+    - PROCESSING
+    - COMPLETE
+    - ERROR
+    type: string
+    title: BatchStatus
+securityDefinitions:
+  api_key:
+    in: header
+    type: apiKey
+    example: abcdefghijklmnopqrstuvwxyz0123456789
+    name: x-api-key
+  RMBXApiAuthorizer:
+    example: abcdefghijklmnopqrstuvwxyz0123456789
+    type: apiKey
+    name: x-api-key
+    in: header
+x-servers:
+- url: //async-api.rhumbix.com/V1_0_1
+  description: Server URL
