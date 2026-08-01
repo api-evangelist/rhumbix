@@ -1,8 +1,25 @@
 aid: rhumbix
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/rhumbix.png
 name: Rhumbix
-description: 'Rhumbix is a company surfaced as a portfolio company of greylock and added to the API Evangelist
-  network as a stub for enrichment. Sector: applications. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: Rhumbix is a field-first workforce management platform for construction that consolidates timekeeping,
+  production tracking, time & materials, change orders, daily field reports, and custom forms into real-time visibility
+  on labor and job costs for trade contractors and general contractors. Rhumbix publishes a REST Public API (Swagger
+  2.0, x-api-key auth) for batch import of employees and projects and batch export of workshift/timecard data, enabling
+  bidirectional flow between the field and ERP/accounting and project-management systems (Sage, Oracle, SAP, QuickBooks,
+  Viewpoint, CMiC, Procore, Autodesk Construction Cloud). Autodesk has signed a definitive agreement to acquire
+  Rhumbix.
 url: https://raw.githubusercontent.com/api-evangelist/rhumbix/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,11 +29,93 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Applications
-apis: []
+- Construction
+- Construction Technology
+- Workforce Management
+- Timekeeping
+- Payroll
+- Field Data Collection
+- Project Management
+- Job Costing
+- Integrations
+- REST API
+apis:
+- aid: rhumbix:rhumbix-batch-export-api
+  name: Rhumbix Batch Export API
+  description: Export Data from Rhumbix
+  humanURL: https://rhumbix.github.io/docs.rhumbix.com/
+  baseURL: https://async-api.rhumbix.com
+  tags:
+  - Batch Export
+  properties:
+  - type: OpenAPI
+    url: openapi/rhumbix-batch-export-api-openapi.yml
+  - type: APIReference
+    url: https://rhumbix.github.io/docs.rhumbix.com/
+  - type: Authentication
+    url: authentication/rhumbix-authentication.yml
+  - type: ErrorCatalog
+    url: errors/rhumbix-problem-types.yml
+  - type: Conventions
+    url: conventions/rhumbix-conventions.yml
+  - type: DataModel
+    url: data-model/rhumbix-data-model.yml
+  - type: Conformance
+    url: conformance/rhumbix-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/rhumbix-lifecycle.yml
+- aid: rhumbix:rhumbix-batch-import-api
+  name: Rhumbix Batch Import API
+  description: Import Data into Rhumbix
+  humanURL: https://rhumbix.github.io/docs.rhumbix.com/
+  baseURL: https://async-api.rhumbix.com
+  tags:
+  - Batch Import
+  properties:
+  - type: OpenAPI
+    url: openapi/rhumbix-batch-import-api-openapi.yml
+  - type: APIReference
+    url: https://rhumbix.github.io/docs.rhumbix.com/
+  - type: Authentication
+    url: authentication/rhumbix-authentication.yml
+  - type: ErrorCatalog
+    url: errors/rhumbix-problem-types.yml
+  - type: Conventions
+    url: conventions/rhumbix-conventions.yml
+  - type: DataModel
+    url: data-model/rhumbix-data-model.yml
+  - type: Conformance
+    url: conformance/rhumbix-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/rhumbix-lifecycle.yml
+- aid: rhumbix:rhumbix-cors-api
+  name: Rhumbix CORS API
+  description: Returns appropriate headers to enable CORS for cross-domain API requests
+  humanURL: https://rhumbix.github.io/docs.rhumbix.com/
+  baseURL: https://async-api.rhumbix.com
+  tags:
+  - CORS
+  properties:
+  - type: OpenAPI
+    url: openapi/rhumbix-cors-api-openapi.yml
+  - type: APIReference
+    url: https://rhumbix.github.io/docs.rhumbix.com/
+  - type: Authentication
+    url: authentication/rhumbix-authentication.yml
+  - type: ErrorCatalog
+    url: errors/rhumbix-problem-types.yml
+  - type: Conventions
+    url: conventions/rhumbix-conventions.yml
+  - type: DataModel
+    url: data-model/rhumbix-data-model.yml
+  - type: Conformance
+    url: conformance/rhumbix-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/rhumbix-lifecycle.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -24,4 +123,39 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://adfs4.sts.altareturn.com/adfs/ls/?wa=wsignin1.0&amp;wtrealm=urn%3aportal%3agreylock&amp;wctx=https%3a%2f%2fgreylock.altareturn.com%2f_layouts%2f15%2fAuthenticate.aspx%3fSource%3d%252F&amp;wreply=https%3a%2f%2fgreylock.altareturn.com%2f_trust%2fdefault.aspx
+  url: https://www.rhumbix.com
+- type: DeveloperPortal
+  url: https://rhumbix.github.io/docs.rhumbix.com/
+- type: Documentation
+  url: https://rhumbix.github.io/docs.rhumbix.com/
+- type: APIReference
+  url: https://rhumbix.github.io/docs.rhumbix.com/
+- type: Integrations
+  url: https://www.rhumbix.com/solutions/integrations
+- type: Support
+  url: https://intercom.help/rhumbix-helpcenter
+- type: HelpCenter
+  url: https://www.rhumbix.com/resources/support
+- type: Blog
+  url: https://www.rhumbix.com/resources/blog
+- type: GitHubOrganization
+  url: https://github.com/rhumbix
+- type: StatusPage
+  url: http://status.rhumbix.com
+- type: Pricing
+  url: https://www.rhumbix.com/pricing
+- type: Login
+  url: https://platform.rhumbix.com/rhumbix/login/
+- type: SignUp
+  url: https://go.rhumbix.com/scheduledemo
+- type: TermsOfService
+  url: https://www.rhumbix.com/service_terms
+- type: PrivacyPolicy
+  url: https://www.rhumbix.com/privacy
+- type: DomainSecurity
+  url: security/rhumbix-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 13
+  pass: local-v1

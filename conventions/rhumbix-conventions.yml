@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/rhumbix-public-api-openapi-original.json
+summary: >-
+  Cross-cutting request/response semantics for the Rhumbix Public API, derived
+  from the Swagger 2.0 spec. The API is a multi-tenant, asynchronous batch API:
+  every path is scoped by a {company_key} segment, writes are submitted as batch
+  jobs that return a batch_key, and reads are performed by polling a status
+  endpoint and then fetching results.
+authentication:
+  style: api-key
+  location: header
+  parameter: x-api-key
+  multi_tenant: true
+  tenant_param: company_key (path)
+  see: authentication/rhumbix-authentication.yml
+async_batch:
+  pattern: submit-poll-fetch
+  submit: POST .../batch/<resource>/import|export returns a BatchKey (batch_key)
+  poll: GET .../batch/<resource>/<import|export>/{batch_key}/status returns ImportStatus/BatchStatus
+  fetch: GET .../batch/workshift/export/{batch_key}/results returns the exported records
+  polling_signal: HTTP 202 while processing, 200 when complete
+idempotency:
+  supported: false
+  note: >-
+    The spec documents no Idempotency-Key header or idempotent-submit contract.
+    Duplicate submission de-duplication is not advertised.
+pagination:
+  supported: false
+  note: Batch export returns the full result set for a batch_key; no cursor/offset paging.
+query_windowing:
+  workshift_export: WorkshiftQuery with start_time / end_time bounds the export window
+content_types:
+  consumes: application/json
+  produces: application/json
+cors:
+  supported: true
+  note: CORS tag in the spec; endpoints return CORS headers for cross-domain requests.
+versioning:
+  scheme: doc-version
+  current: '1.0.1'
+  note: Version is carried in the published docs path (version/1.0.1); not in the API base path.
+error_envelope:
+  schema: ImportStatus
+  fields: [status, detail]
+  see: errors/rhumbix-problem-types.yml
+rate_limiting:
+  documented: false

@@ -1,0 +1,22 @@
+# Rhumbix
+
+> Rhumbix is a field-first workforce management platform for construction (timekeeping, production tracking, time & materials, change orders, daily reports). It publishes a REST Public API (Swagger 2.0, x-api-key auth) for batch import of employees/projects and batch export of workshift/timecard data, used to build ERP and project-management integrations. Autodesk has signed a definitive agreement to acquire Rhumbix.
+
+## APIs
+- [Rhumbix Public API docs](https://rhumbix.github.io/docs.rhumbix.com/): Swagger 2.0 API for batch employee/project import and workshift export. Base host https://async-api.rhumbix.com, per-company_key, x-api-key header.
+
+## Specs
+- [OpenAPI (Swagger 2.0)](openapi/rhumbix-public-api-openapi-original.json): 7 operations across batch import/export.
+- [Authentication](authentication/rhumbix-authentication.yml): apiKey in header (x-api-key).
+- [Conventions](conventions/rhumbix-conventions.yml): async submit-poll-fetch batch pattern, multi-tenant company_key.
+- [Error catalog](errors/rhumbix-problem-types.yml): ImportStatus envelope; 202 processing, 403 forbidden.
+- [Data model](data-model/rhumbix-data-model.yml): Employee, Project, CostCode, Workshift, TimecardEntry, WorkComponents, Schema.
+- [Conformance](conformance/rhumbix-conformance.yml): Swagger 2.0, apiKey, CORS, async-batch.
+- [Lifecycle](lifecycle/rhumbix-lifecycle.yml): docs version 1.0.1; status http://status.rhumbix.com.
+
+## Docs
+- [Integrations](https://www.rhumbix.com/solutions/integrations): ERP/accounting and project-management connectors (Sage, Oracle, SAP, QuickBooks, Viewpoint, CMiC, Procore, Autodesk Construction Cloud).
+- [Help Center](https://intercom.help/rhumbix-helpcenter)
+- [Pricing](https://www.rhumbix.com/pricing)
+- [Blog](https://www.rhumbix.com/resources/blog)
+- [Status](http://status.rhumbix.com)

@@ -1,0 +1,66 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/rhumbix-public-api-openapi-original.json
+note: >-
+  Entity-relationship graph derived from the Swagger 2.0 `definitions` ($ref
+  links and id-reference fields). Rhumbix models a construction field-data domain:
+  Employees and Projects are imported; Workshifts (with TimecardEntries) are
+  exported; work is coded against CostCodes and captured via configurable Schemas/Forms.
+entities:
+- name: Employee
+  fields: [first_name, last_name, company_supplied_id, classification, is_active, user_role, trade, phone, project_job_numbers, email]
+  natural_key: company_supplied_id
+  belongs_to_projects_via: project_job_numbers
+- name: Project
+  fields: [status, description, cost_codes, address, job_number, name]
+  natural_key: job_number
+- name: CostCode
+  fields: [units, code, description, project_job_number]
+  belongs_to: Project (via project_job_number)
+- name: Workshift
+  fields: [workshift_key, foreman, timecard_entries]
+  natural_key: workshift_key
+- name: TimecardEntry
+  fields: [employee, work_components]
+- name: WorkComponents
+  fields: [cost_code, double_time_minutes, standard_time_minutes, over_time_minutes]
+- name: Schema
+  fields: [schema_key, name, schema]
+  natural_key: schema_key
+- name: SchemaRef
+  fields: [schema_key, name]
+- name: Form
+  fields: [data, schema]
+relationships:
+- from: Workshift
+  to: Employee
+  kind: has_one
+  via: foreman
+- from: Workshift
+  to: TimecardEntry
+  kind: has_many
+  via: timecard_entries
+- from: TimecardEntry
+  to: Employee
+  kind: belongs_to
+  via: employee
+- from: TimecardEntry
+  to: WorkComponents
+  kind: has_many
+  via: work_components
+- from: WorkComponents
+  to: CostCode
+  kind: has_one
+  via: cost_code
+- from: CostCode
+  to: Project
+  kind: belongs_to
+  via: project_job_number
+- from: Employee
+  to: Project
+  kind: has_many
+  via: project_job_numbers
+- from: Form
+  to: SchemaRef
+  kind: has_one
+  via: schema

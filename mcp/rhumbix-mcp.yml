@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/rhumbix-public-api-openapi-original.json
+note: >-
+  No official hosted/remote Rhumbix MCP server was found. This is a DERIVED
+  candidate tool list, one tool per OpenAPI operation, for a future MCP server
+  fronting the Rhumbix Public API. All tools require an x-api-key and a
+  company_key.
+server:
+  name: rhumbix
+  transport: http
+  url: null
+tools:
+- name: batch_employee_import
+  description: Import a batch of employees into Rhumbix for a company.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchEmployeeImport
+- name: batch_employee_import_status
+  description: Get the processing status of an employee import batch.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchEmployeeImportStatus
+- name: batch_project_import
+  description: Import a batch of projects into Rhumbix for a company.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchProjectImport
+- name: batch_project_import_status
+  description: Get the processing status of a project import batch.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchProjectImportStatus
+- name: batch_workshift_export
+  description: Request a batch export of workshift/timecard data for a time window.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchWorkshiftExport
+- name: batch_workshift_export_status
+  description: Poll the status of a workshift export batch (202 while processing, 200 when ready).
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchWorkshiftExportStatus
+- name: batch_workshift_export_results
+  description: Fetch the results of a completed workshift export batch.
+  source_operation: openapi/rhumbix-public-api-openapi-original.json#batchWorkshiftExportResults

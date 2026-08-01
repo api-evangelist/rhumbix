@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Rhumbix Public API
+  version: 1.0.0
+extends: openapi/rhumbix-public-api-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-api-pattern: async-batch-submit-poll-fetch
+    x-multi-tenant: company_key
+    x-authentication: authentication/rhumbix-authentication.yml
+    x-conventions: conventions/rhumbix-conventions.yml
+    x-data-model: data-model/rhumbix-data-model.yml
+- target: $.tags
+  update:
+  - name: Batch Import
+    description: Import employees and projects into Rhumbix (submit → poll status).
+  - name: Batch Export
+    description: Export workshift/timecard data from Rhumbix (submit → poll status → fetch results).

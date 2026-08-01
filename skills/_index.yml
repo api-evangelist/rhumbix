@@ -1,0 +1,12 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/rhumbix-public-api-openapi-original.json
+skills:
+- file: rhumbix-import-employees.md
+  name: Import employees into Rhumbix
+  api: openapi/rhumbix-public-api-openapi-original.json
+  operations: [batchEmployeeImport, batchEmployeeImportStatus]
+- file: rhumbix-export-workshifts.md
+  name: Export workshift/timecard data from Rhumbix
+  api: openapi/rhumbix-public-api-openapi-original.json
+  operations: [batchWorkshiftExport, batchWorkshiftExportStatus, batchWorkshiftExportResults]

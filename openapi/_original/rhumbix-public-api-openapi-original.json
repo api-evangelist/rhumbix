@@ -1,0 +1,1417 @@
+{
+  "info": {
+    "version": "1.0.1",
+    "description": "The Rhumbix API is intended for use by Rhumbix customers and partners to build integrations with the Rhumbix application. The API is designed to support regular updates and queries in batch requests. Rhumbix primarily manages data for construction workers in the field. Integrations should be aware that updates to this data will directly influence the users of the mobile and web application. For access to the API, contact your Rhumbix support representitive. Further application documentation and support can be found at https://rhumbix.desk.com/ \n## Overview\nThe usual order of operation is like this: \n1) You post data to the API with your unique company_key and x-api-key. \n2) The request is put into a queue of requests (sometimes requests are very large) and you receive back a batch_key to check the status of your request. \n3) You check the unique URL of your request using your new batch_key, your company_key and x-api-key until its status is COMPLETE. \n### Base URL \nhttps://async-api.rhumbix.com/V1_0_1\n# Authentication\nAuthentication is handled via a token system and a unique company_key. You can create a company_key and retrieve an api token key by logging in to the Rhumbix web platform. Once you have an access token, you can interact with the API by including the `x-api-key` in the header of an HTTP `GET` or `POST` request.\n```json\n{\n  \"x-api-key\": \"abcdefghijklmnopqrstuvwxyz0123456789\" \n}\n```",
+    "x-logo": {
+      "url": "https://s3.amazonaws.com/rmbx-export-assets/rmbx_horizontal_logo_colored.png"
+    },
+    "title": "Rhumbix Public API"
+  },
+  "paths": {
+    "/{company_key}/batch/employee/import": {
+      "post": {
+        "description": "Post a new batch of employee data for import into Rhumbix. Returns a new batch_key for subsequently retrieving status updates for this batch.",
+        "parameters": [
+          {
+            "description": "The unique company key associated with your api key.",
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "description": "An object that contains employee data that you would like to import into Rhumbix.",
+            "required": true,
+            "in": "body",
+            "name": "batch_request",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Employee"
+              },
+              "type": "array",
+              "example": [
+                {
+                  "first_name": "Tom",
+                  "last_name": "Tomson",
+                  "company_supplied_id": "TOM01",
+                  "classification": "apprentice",
+                  "is_active": true,
+                  "user_role": "WORKER",
+                  "trade": "carpenter",
+                  "phone": "9876543210",
+                  "project_job_numbers": [
+                    "73617665666572726973"
+                  ],
+                  "email": "tomt@company.com"
+                },
+                {
+                  "first_name": "John",
+                  "last_name": "Johnson",
+                  "company_supplied_id": "JON02",
+                  "classification": "",
+                  "is_active": true,
+                  "user_role": "FOREMAN",
+                  "trade": "",
+                  "phone": "9876543211",
+                  "project_job_numbers": [
+                    "73617665666572726973",
+                    "7468652064756465"
+                  ],
+                  "email": "johnj@company.com"
+                }
+              ],
+              "title": "BatchEmployeeImportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Batch Import"
+        ],
+        "summary": "Employee Batch Data",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchEmployeeImport",
+        "x-code-samples": [
+          {
+            "lang": "Shell",
+            "source": "curl -X POST -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\n-d '[{\"company_supplied_id\": \"alexa\", \"user_role\": \"WORKER\", \n\"first_name\": \"Alex\", \"last_name\": \"Alexander\"}]' \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/employee/import\n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests\ndata = [\n    {\n        'company_supplied_id': 'alexa', \n        'user_role': 'WORKER', \n        'first_name': 'Alex', \n        'last_name': 'Alexander'\n    }\n]\n\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{}'\\\n      '/batch/employee/import'.format(company_key)\nresult = requests.post(url, headers=headers, json=data)\nprint result.json() \n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch successfully posted",
+            "schema": {
+              "title": "BatchEmployeeImportResponse",
+              "type": "object",
+              "example": {
+                "batch_key": "1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90"
+              },
+              "properties": {
+                "batch_key": {
+                  "$ref": "#/definitions/BatchKey"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchEmployeeImportOptions"
+      }
+    },
+    "/{company_key}/batch/workshift/export/{batch_key}/status": {
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchWorkshiftExportStatusOptions"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch is PENDING (in-process) or COMPLETE",
+            "schema": {
+              "title": "BatchWorkshiftExportStatusResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "PENDING"
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "url does not exist yet but will when batch queues up",
+            "schema": {
+              "title": "BatchWorkshiftExportStatusAcceptedResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "ACCEPTED"
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "type": "string",
+            "name": "batch_key",
+            "in": "path"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "tags": [
+          "Batch Export"
+        ],
+        "summary": "Workshift Batch Status",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchWorkshiftExportStatus",
+        "x-code-samples": [
+          {
+            "lang": "Shell",
+            "source": "curl -X GET -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/workshift/export/1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90/status\n# {\"status\": \"PENDING\"}\nsleep 60\ncurl -X GET -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/workshift/export/1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90/status\n# {\"status\": \"COMPLETE\"}"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests, time\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nbatch_key = '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{0}'\\\n      '/batch/workshift/export/{1}/status'.format(\n          company_key, batch_key)\nresult = requests.get(url, headers=headers)\nprint result.json() \n# {'status': 'PENDING'}\ntime.sleep(60)\nresult = requests.get(url, headers=headers)\nprint result.json() \n# {'status': 'COMPLETE'}"
+          }
+        ],
+        "description": "Retrieve the processing status of a workshift export batch using the batch_key value that was returned when the batch was created.  After creating a new export batch, you should poll this endpoint to monitor the status as your batch is processed asynchronously.  When the returned status is \"Complete\", retrieve your exported data by calling the export results method."
+      }
+    },
+    "/{company_key}/batch/workshift/export/{batch_key}/results": {
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchWorkshiftResultsOptions"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch complete",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Workshift"
+              },
+              "type": "array",
+              "example": {
+                "errors": {
+                  "bad_query_term": [
+                    "This is not an acceptable filter parameter."
+                  ]
+                },
+                "workshifts": [
+                  {
+                    "work_shift_key": "D7bKqP5r",
+                    "foreman": {
+                      "first_name": "John",
+                      "last_name": "Johnson",
+                      "company_supplied_id": "JON02",
+                      "classification": "",
+                      "is_active": true,
+                      "user_role": "FOREMAN",
+                      "trade": "",
+                      "phone": "9876543211",
+                      "email": "johnj@company.com"
+                    },
+                    "start_time": "2017-01-03T22:38:33.885000Z",
+                    "timezone": "America/Los_Angeles",
+                    "timecard_entries": [
+                      {
+                        "employee": {
+                          "first_name": "John",
+                          "last_name": "Johnson",
+                          "company_supplied_id": "JON02",
+                          "classification": "",
+                          "is_active": true,
+                          "user_role": "FOREMAN",
+                          "trade": "",
+                          "phone": "9876543211",
+                          "email": "johnj@company.com"
+                        },
+                        "work_components": [
+                          {
+                            "cost_code": {
+                              "code": "HF-669",
+                              "group": "HF",
+                              "description": "Electrical Gear",
+                              "project_job_number": "73617665666572726973",
+                              "erp_units": "",
+                              "units": ""
+                            },
+                            "is_approved": true,
+                            "over_time_minutes": 0,
+                            "double_time_minutes": 0,
+                            "standard_time_minutes": 240
+                          },
+                          {
+                            "cost_code": {
+                              "code": "HF-770",
+                              "group": "HF",
+                              "description": "Platform Conduit",
+                              "project_job_number": "73617665666572726973",
+                              "erp_units": "",
+                              "units": "meters"
+                            },
+                            "is_approved": true,
+                            "over_time_minutes": 60,
+                            "double_time_minutes": 0,
+                            "standard_time_minutes": 240
+                          }
+                        ],
+                        "forms": []
+                      },
+                      {
+                        "employee": {
+                          "first_name": "Tom",
+                          "last_name": "Tomson",
+                          "company_supplied_id": "TOM01",
+                          "classification": "apprentice",
+                          "is_active": true,
+                          "user_role": "WORKER",
+                          "trade": "carpenter",
+                          "phone": "9876543210",
+                          "email": "tomt@company.com"
+                        },
+                        "work_components": [
+                          {
+                            "cost_code": {
+                              "code": "HF-770",
+                              "group": "HF",
+                              "description": "Platform Conduit",
+                              "project_job_number": "73617665666572726973",
+                              "erp_units": "",
+                              "units": "meters"
+                            },
+                            "is_approved": true,
+                            "over_time_minutes": 0,
+                            "double_time_minutes": 0,
+                            "standard_time_minutes": 480
+                          }
+                        ],
+                        "forms": []
+                      }
+                    ],
+                    "end_time": "2017-01-04T01:11:58.160000Z"
+                  },
+                  {
+                    "work_shift_key": "v5PAbn3L",
+                    "foreman": {
+                      "first_name": "John",
+                      "last_name": "Johnson",
+                      "company_supplied_id": "JON02",
+                      "classification": "",
+                      "is_active": true,
+                      "user_role": "FOREMAN",
+                      "trade": "",
+                      "phone": "9876543211",
+                      "email": "johnj@company.com"
+                    },
+                    "start_time": "2017-01-04T19:42:28.283000Z",
+                    "timezone": "America/Los_Angeles",
+                    "timecard_entries": [
+                      {
+                        "employee": {
+                          "first_name": "John",
+                          "last_name": "Johnson",
+                          "company_supplied_id": "JON02",
+                          "classification": "",
+                          "is_active": true,
+                          "user_role": "FOREMAN",
+                          "trade": "",
+                          "phone": "9876543211",
+                          "email": "johnj@company.com"
+                        },
+                        "work_components": [
+                          {
+                            "cost_code": {
+                              "code": "HF-669",
+                              "group": "HF",
+                              "description": "Electrical Gear",
+                              "project_job_number": "73617665666572726973",
+                              "erp_units": "",
+                              "units": ""
+                            },
+                            "is_approved": true,
+                            "over_time_minutes": 0,
+                            "double_time_minutes": 0,
+                            "standard_time_minutes": 240
+                          }
+                        ],
+                        "forms": []
+                      }
+                    ],
+                    "end_time": "2017-01-05T23:07:18.124000Z"
+                  }
+                ]
+              },
+              "title": "BatchWorkshiftExportResultsResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "type": "string",
+            "name": "batch_key",
+            "in": "path"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Batch Export"
+        ],
+        "summary": "Workshift Batch Results",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchWorkshiftExportResults",
+        "x-code-samples": [
+          {
+            "lang": "Shell",
+            "source": "curl -X GET -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/workshift/export/1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90/results\n# {\"errors\": {\"bad_query_term\": [\"This is not an acceptable filter parameter.\"]}, \"workshifts\": [{\"work_shift_key\": \"D7bKqP5r\", \"foreman\": { \"<foreman details>\" }, \"start_time\": \"2017-01-03T22:38:33.885000Z\", \"timecard_entries\": [ \"<timecard entry details>\" ], \"end_time\": \"2017-01-04T01:11:58.160000Z\"}]}"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests, time\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nbatch_key = '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{0}'\\\n      '/batch/workshift/export/{1}/results'.format(\n          company_key, batch_key)\nresult = requests.get(url, headers=headers)\nprint result.json() \n# {\n  'errors': {\n    'bad_query_term': [\n      'This is not an acceptable filter parameter.'\n    ]\n  },\n  'workshifts': [\n    {\n      'end_time': '2017-01-04T01:11:58.160000Z',\n      'foreman': { '<foreman details>' },\n      'start_time': '2017-01-03T22:38:33.885000Z',\n      'timecard_entries': ['<timecard entry details>'],\n      'work_shift_key': 'D7bKqP5r'\n    }\n  ]\n}"
+          }
+        ],
+        "description": "Retrieve the results of a completed workshift export batch.  You should poll the export status for this batch until it returns a status of \"COMPLETE\" before trying to retrieve these results."
+      }
+    },
+    "/{company_key}/batch/workshift/export": {
+      "post": {
+        "description": "Post a new request to export workshift data asynchronously from Rhumbix.  Returns the new batch_key for subsequently retrieving status and results for this batch.",
+        "parameters": [
+          {
+            "description": "The unique company key associated with your api key.",
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "description": "An array of of queries describing data you would like to export from Rhumbix.",
+            "required": true,
+            "in": "body",
+            "name": "batch_workshift_export_request",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/WorkshiftQuery"
+              },
+              "type": "array",
+              "example": {
+                "start_time": "2014-01-01",
+                "bad_query_term": "a query filter parameter that will be ignored",
+                "end_time": "2014-01-07"
+              },
+              "title": "BatchWorkshiftExportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Batch Export"
+        ],
+        "summary": "Workshift Export Request",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchWorkshiftExport",
+        "x-code-samples": [
+          {
+            "lang": "Shell",
+            "source": "curl -X POST -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\n-d '{\"start_time\": \"2014-01-01\", \"end_time\": \"2014-01-07\", \n\"bad_query_term\": \"a query filter parameter that will be ignored\"}' \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/workshift/export\n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests\ndata = {\n    'start_time': '2014-01-01', \n    'bad_query_term': 'this will be ignored', \n    'end_time': '2014-01-07'\n}\n\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{}'\\\n      '/batch/workshift/export'.format(company_key)\nresult = requests.post(url, headers=headers, json=data)\nprint result.json() \n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch request received",
+            "schema": {
+              "title": "BatchWorkshiftExportResponse",
+              "type": "object",
+              "example": {
+                "batch_key": "1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90"
+              },
+              "properties": {
+                "batch_key": {
+                  "$ref": "#/definitions/BatchKey"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchWorkshiftExportOptions"
+      }
+    },
+    "/{company_key}/batch/project/import": {
+      "post": {
+        "description": "Post a new batch of project data to import into Rhumbix. Returns the new batch_key for subsequently retrieving status updates for this batch.",
+        "parameters": [
+          {
+            "description": "The unique company key associated with your api key.",
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "description": "An object that contains project data that you would like to import into Rhumbix. \n\n**Unique Constraints:** _[ Project + Code ]_  \n\n\n\nThe CostCode field `code` muse be unique within a Project. Do not pass in multiples of the same code. `description` **_can_** be an empty string: \"\". \n```json\n# This will ERROR because there are two \"10-200\" codes.\n{\n    \"job_number\": \"JOB314\",\n    \"name\": \"Mission Impossible\",\n    \"cost_codes\": [\n        {\n            \"code\": \"10-200\",\n            \"description\": \"Conduit\",\n            \"units\": \"feet\",\n            \"is_active\": true\n        },\n        {\n            \"code\": \"10-200\",\n            \"description\": \"Electrical\",\n            \"units\": \"meters\",\n            \"is_active\": false\n        }\n    ]\n}\n```",
+            "required": true,
+            "in": "body",
+            "name": "batch_request",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Project"
+              },
+              "type": "array",
+              "example": [
+                {
+                  "status": "INACTIVE",
+                  "description": "New Bowling Alley",
+                  "cost_codes": [
+                    {
+                      "code": "18-10048",
+                      "group": "18",
+                      "description": "Plumbing",
+                      "is_active": true,
+                      "erp_units": "feet",
+                      "units": "percent complete"
+                    },
+                    {
+                      "units": "",
+                      "is_active": true,
+                      "code": "18-10012",
+                      "group": "18",
+                      "description": "Heating"
+                    }
+                  ],
+                  "address": "5227 Santa Monica Boulevard, Los Angeles, CA 90029",
+                  "job_number": "7468652064756465",
+                  "name": "Hollywood Star Lanes"
+                },
+                {
+                  "status": "ACTIVE",
+                  "description": "High End Restaurant where Abe Froman Eats.",
+                  "cost_codes": [
+                    {
+                      "units": "",
+                      "code": "HF-669",
+                      "is_active": true,
+                      "description": "Electrical Gear"
+                    },
+                    {
+                      "units": "meters",
+                      "code": "HF-770",
+                      "is_active": true,
+                      "description": "Platform Conduit"
+                    }
+                  ],
+                  "address": "22 W Schiller St, Chicago, IL 60610",
+                  "job_number": "73617665666572726973",
+                  "name": "Chez Quis"
+                }
+              ],
+              "title": "BatchProjectImportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Batch Import"
+        ],
+        "summary": "Project Batch Data",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchProjectImport",
+        "x-code-samples": [
+          {
+            "lang": "Shell",
+            "source": "curl -X POST -H \"Content-Type: application/json\" \\\n-H \"x-api-key: foobarbazbuz\" \\\n-d '[{\"job_number\": \"7468652064756465\", \"name\": \"Hollywood Star Lanes\",\n\"address\": \"5227 Santa Monica Boulevard, Los Angeles, CA 90029\",\n\"cost_codes\": [{\"code\": \"18-10048\",\"description\": \"Plumbing\",\"units\": \n\"feet\"}, {\"code\": \"18-10012\",\"description\": \"Heating\",\"units\": \"\"}]}, \n{\"job_number\": \"73617665666572726973\",\"name\": \"Chez Quis\", \n\"description\": \"High End Restaurant where Abe Froman Eats.\", \n\"address\": \"22 W Schiller St, Chicago, IL 60610\",\"cost_codes\": []}]' \\\nhttps://async-api.rhumbix.com/V1_0_1/greatco/batch/project/import\n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          },
+          {
+            "lang": "Python",
+            "source": "import requests\ndata = [\n    {\n        'job_number': '7468652064756465', \n        'name': 'Hollywood Star Lanes',\n        'description': '',\n        'address': '5227 Santa Monica Boulevard, Los Angeles, CA 90029',\n        'cost_codes': [\n            {\n                'code': '18-10048',\n                'description': 'Plumbing',\n                'units': 'feet'\n            },\n            {\n                'code': '18-10012',\n                'description': 'Heating',\n                'units': ''\n            }\n        ]\n    },\n    {\n        'job_number': '73617665666572726973',\n        'name': 'Chez Quis',\n        'description': 'High End Restaurant where Abe Froman Eats.',\n        'address': '22 W Schiller St, Chicago, IL 60610',\n        'cost_codes': []\n    }\n]\n\nheaders = {\n    'x-api-key': 'foobarbazbuz', \n    'Accept': 'application/json', \n    'Content-Type': 'application/json'\n}\n\ncompany_key = 'greatco'\nurl = 'https://async-api.rhumbix.com/V1_0_1/{}'\\\n      '/batch/project/import'.format(company_key)\nresult = requests.post(url, headers=headers, json=data)\nprint result.json() \n# {'batch_key': '1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90'}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch successfully posted",
+            "schema": {
+              "title": "BatchProjectImportResponse",
+              "type": "object",
+              "example": {
+                "batch_key": "1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90"
+              },
+              "properties": {
+                "batch_key": {
+                  "$ref": "#/definitions/BatchKey"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchProjectImportOptions"
+      }
+    },
+    "/{company_key}/batch/employee/import/{batch_key}/status": {
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchEmployeeImportStatusOptions"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch is PENDING (in-process) or COMPLETE",
+            "schema": {
+              "title": "BatchEmployeeImportStatusResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "COMPLETE",
+                "errors": {
+                  "": {
+                    "company_supplied_id": [
+                      "This field is required."
+                    ]
+                  },
+                  "BOB123": {
+                    "phone": [
+                      "This field must be unique."
+                    ],
+                    "email": [
+                      "This field must be unique."
+                    ]
+                  },
+                  "LARRY6": {
+                    "project_job_numbers": {
+                      "non_existant_ProjectABC": [
+                        "This job number does not exist."
+                      ]
+                    }
+                  }
+                }
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                },
+                "employees": {
+                  "items": {
+                    "$ref": "#/definitions/EmployeeImportStatus"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "url does not exist yet but will when batch queues up",
+            "schema": {
+              "title": "BatchStatusResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "ACCEPTED"
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "type": "string",
+            "name": "batch_key",
+            "in": "path"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "tags": [
+          "Batch Import"
+        ],
+        "summary": "Employee Import Status",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchEmployeeImportStatus",
+        "description": "Retrieve the processing status of a employee import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is \"Complete\", the 'employees' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record in Rhumbix), CREATED (new record created in Rhumbix), or ERROR (check the 'details' property for more information on why the record was not created nor imported).  It is possible for some records to be created/updated succssfully while others fail.  Check the status on each row to ensure that every record was imported successfully or to handle errors appopriately."
+      }
+    },
+    "/{company_key}/batch/project/import/{batch_key}/status": {
+      "options": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            },
+            "description": "ok"
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "CORS"
+        ],
+        "summary": "Returns appropriate headers to enable CORS for cross-domain API requests",
+        "consumes": [
+          "application/json"
+        ],
+        "operationId": "batchProjectImportStatusOptions"
+      },
+      "get": {
+        "responses": {
+          "200": {
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            },
+            "description": "batch is PENDING (in-process) or COMPLETE",
+            "schema": {
+              "title": "BatchProjectImportStatusResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "COMPLETE",
+                "errors": {
+                  "": {
+                    "job_number": [
+                      "This field may not be blank."
+                    ]
+                  },
+                  "projectXYZ": {
+                    "cost_codes": {
+                      "": {
+                        "code": [
+                          "This field may not be blank."
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                },
+                "projects": {
+                  "items": {
+                    "$ref": "#/definitions/ProjectImportStatus"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "url does not exist yet but will when batch queues up",
+            "schema": {
+              "title": "BatchStatusResponse",
+              "required": [
+                "status"
+              ],
+              "type": "object",
+              "example": {
+                "status": "ACCEPTED"
+              },
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/BatchStatus"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "required": true,
+            "type": "string",
+            "name": "company_key",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "type": "string",
+            "name": "batch_key",
+            "in": "path"
+          }
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "tags": [
+          "Batch Import"
+        ],
+        "summary": "Project Import Status",
+        "security": [
+          {
+            "RMBXApiAuthorizer": []
+          },
+          {
+            "api_key": []
+          }
+        ],
+        "operationId": "batchProjectImportStatus",
+        "description": "Retrieve the processing status of a project import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is \"Complete\", the 'projects' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record in Rhumbix), CREATED (new record created in Rhumbix), or ERROR (check the 'details' property for more information on why the record was not created nor imported).  It is possible for some records to be created/updated succssfully while others fail.  Check the status on each row to ensure that every record was imported successfully or to handle errors appopriately."
+      }
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "Batch Export",
+      "description": "Export Data from Rhumbix"
+    },
+    {
+      "name": "Batch Import",
+      "description": "Import Data into Rhumbix"
+    },
+    {
+      "externalDocs": {
+        "url": "https://www.w3.org/TR/cors/"
+      },
+      "name": "CORS",
+      "description": "Returns appropriate headers to enable CORS for cross-domain API requests"
+    }
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "x-servers": [
+    {
+      "url": "//async-api.rhumbix.com/V1_0_1",
+      "description": "Server URL"
+    }
+  ],
+  "securityDefinitions": {
+    "api_key": {
+      "in": "header",
+      "type": "apiKey",
+      "example": "abcdefghijklmnopqrstuvwxyz0123456789",
+      "name": "x-api-key"
+    },
+    "RMBXApiAuthorizer": {
+      "example": "abcdefghijklmnopqrstuvwxyz0123456789",
+      "type": "apiKey",
+      "name": "x-api-key",
+      "in": "header"
+    }
+  },
+  "host": "async-api.rhumbix.com",
+  "definitions": {
+    "BatchKey": {
+      "type": "string",
+      "title": "BatchKey"
+    },
+    "Form": {
+      "required": [
+        "schema",
+        "data"
+      ],
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object"
+        },
+        "schema": {
+          "$ref": "#/definitions/SchemaRef"
+        }
+      },
+      "title": "Form"
+    },
+    "ProjectImportStatus": {
+      "title": "ProjectImportStatus",
+      "required": [
+        "job_number"
+      ],
+      "properties": {
+        "job_number": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ImportStatus"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "Employee": {
+      "required": [
+        "company_supplied_id"
+      ],
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "company_supplied_id": {
+          "type": "string",
+          "description": "Unique id for each employee"
+        },
+        "classification": {
+          "type": "string"
+        },
+        "is_active": {
+          "type": "boolean"
+        },
+        "user_role": {
+          "enum": [
+            "ADMIN",
+            "FOREMAN",
+            "PM",
+            "WORKER",
+            "OFFICE_STAFF"
+          ],
+          "type": "string"
+        },
+        "trade": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "project_job_numbers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "Employee"
+    },
+    "Workshift": {
+      "type": "object",
+      "properties": {
+        "workshift_key": {
+          "type": "string"
+        },
+        "foreman": {
+          "$ref": "#/definitions/Employee"
+        },
+        "timecard_entries": {
+          "items": {
+            "$ref": "#/definitions/TimecardEntry"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Workshift"
+    },
+    "ProjectQuery": {
+      "type": "object",
+      "title": "ProjectQuery"
+    },
+    "Project": {
+      "required": [
+        "job_number",
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "INACTIVE",
+            "ACTIVE"
+          ],
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cost_codes": {
+          "items": {
+            "required": [
+              "code",
+              "description"
+            ],
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "is_active": {
+                "type": "boolean"
+              },
+              "erp_units": {
+                "type": "string",
+                "description": "Units, as tracked from an accounting perspective (i.e. \"sq ft\")"
+              },
+              "units": {
+                "type": "string",
+                "description": "Units, as tracked from a field perspective (i.e. \"percent complete\")"
+              }
+            },
+            "title": "CostCode"
+          },
+          "type": "array"
+        },
+        "address": {
+          "type": "string"
+        },
+        "job_number": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Project"
+    },
+    "ImportStatus": {
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "PENDING",
+            "CREATED",
+            "UPDATED",
+            "ERROR"
+          ],
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "BatchStatus": {
+      "enum": [
+        "NOT_FOUND",
+        "ACCEPTED",
+        "PROCESSING",
+        "COMPLETE",
+        "ERROR"
+      ],
+      "type": "string",
+      "title": "BatchStatus"
+    },
+    "CostCode": {
+      "type": "object",
+      "properties": {
+        "units": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "project_job_number": {
+          "type": "string"
+        }
+      },
+      "title": "CostCode"
+    },
+    "WorkComponents": {
+      "type": "object",
+      "properties": {
+        "cost_code": {
+          "$ref": "#/definitions/CostCode"
+        },
+        "double_time_minutes": {
+          "type": "integer"
+        },
+        "standard_time_minutes": {
+          "type": "integer"
+        },
+        "over_time_minutes": {
+          "type": "integer"
+        }
+      },
+      "title": "WorkComponents"
+    },
+    "WorkshiftQuery": {
+      "required": [
+        "start_time",
+        "end_time"
+      ],
+      "type": "object",
+      "properties": {
+        "start_time": {
+          "type": "string",
+          "format": "dateTime"
+        },
+        "end_time": {
+          "type": "string",
+          "format": "dateTime"
+        }
+      },
+      "title": "WorkshiftQuery"
+    },
+    "SchemaQuery": {
+      "title": "SchemaQuery",
+      "required": [
+        "schema_key"
+      ],
+      "type": "object",
+      "properties": {
+        "schema_key": {
+          "type": "string"
+        }
+      },
+      "description": "Request to export a schema"
+    },
+    "EmployeeImportStatus": {
+      "title": "EmployeeImportStatus",
+      "required": [
+        "company_supplied_id"
+      ],
+      "properties": {
+        "company_supplied_id": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$ref": "#/definitions/ImportStatus"
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "TimecardEntry": {
+      "type": "object",
+      "properties": {
+        "employee": {
+          "$ref": "#/definitions/Employee"
+        },
+        "work_components": {
+          "items": {
+            "$ref": "#/definitions/WorkComponents"
+          },
+          "type": "array"
+        }
+      },
+      "title": "TimecardEntry"
+    },
+    "Schema": {
+      "required": [
+        "schema_key"
+      ],
+      "type": "object",
+      "properties": {
+        "schema_key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "object"
+        }
+      },
+      "title": "Schema"
+    },
+    "SchemaRef": {
+      "title": "SchemaRef",
+      "required": [
+        "schema_key"
+      ],
+      "type": "object",
+      "properties": {
+        "schema_key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "description": "Use the provided key to export the schema"
+    }
+  },
+  "swagger": "2.0",
+  "consumes": [
+    "application/json"
+  ]
+}

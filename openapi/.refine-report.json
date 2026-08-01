@@ -1,0 +1,18 @@
+{
+  "provider": "rhumbix",
+  "sources": [
+    "rhumbix-batch-export-api-openapi.yml",
+    "rhumbix-batch-import-api-openapi.yml",
+    "rhumbix-cors-api-openapi.yml"
+  ],
+  "outputs": [
+    "rhumbix-batch-export-api-openapi.yml",
+    "rhumbix-batch-import-api-openapi.yml",
+    "rhumbix-cors-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

@@ -1,0 +1,18 @@
+generated: '2026-07-21'
+method: searched
+source: https://www.rhumbix.com
+versioning:
+  scheme: doc-version
+  current: '1.0.1'
+  docs: https://rhumbix.github.io/docs.rhumbix.com/
+  note: >-
+    The published API docs are versioned (version/1.0.1); the spec does not carry
+    a version in its base path.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No public API deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+sla:
+  url: null
+status_page: http://status.rhumbix.com
+deprecated_operations: []
