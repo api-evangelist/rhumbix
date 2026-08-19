@@ -1,0 +1,518 @@
+{
+  "item": [
+    {
+      "id": "818a41a1-0fcd-453a-ad72-05ff21766250",
+      "name": "Batch Export",
+      "description": {
+        "content": "Export Data from Rhumbix",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "543e1e22-94ac-4286-8496-384353d67236",
+          "name": "Workshift Batch Status",
+          "request": {
+            "name": "Workshift Batch Status",
+            "description": {
+              "content": "Retrieve the processing status of a workshift export batch using the batch_key value that was returned when the batch was created.  After creating a new export batch, you should poll this endpoint to monitor the status as your batch is processed asynchronously.  When the returned status is \"Complete\", retrieve your exported data by calling the export results method.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":company_key",
+                "batch",
+                "workshift",
+                "export",
+                ":batch_key",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "company_key",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "batch_key",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "66b94ab8-6028-42db-92d3-28207760134c",
+              "name": "batch is PENDING (in-process) or COMPLETE",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":company_key",
+                    "batch",
+                    "workshift",
+                    "export",
+                    ":batch_key",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "company_key",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batch_key",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "string",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ACCEPTED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97ca1d41-8093-451e-be73-59ee78e3eaef",
+              "name": "url does not exist yet but will when batch queues up",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":company_key",
+                    "batch",
+                    "workshift",
+                    "export",
+                    ":batch_key",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "company_key",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batch_key",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"ACCEPTED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "faf7a650-d111-4b35-b441-a5e6658bff2e",
+          "name": "Workshift Batch Results",
+          "request": {
+            "name": "Workshift Batch Results",
+            "description": {
+              "content": "Retrieve the results of a completed workshift export batch.  You should poll the export status for this batch until it returns a status of \"COMPLETE\" before trying to retrieve these results.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":company_key",
+                "batch",
+                "workshift",
+                "export",
+                ":batch_key",
+                "results"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "company_key",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "batch_key",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d8053f9e-2ccb-4a0c-a0d8-b1b765579a43",
+              "name": "batch complete",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":company_key",
+                    "batch",
+                    "workshift",
+                    "export",
+                    ":batch_key",
+                    "results"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "company_key",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "batch_key",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "string",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"workshift_key\": \"string\",\n    \"foreman\": {\n      \"company_supplied_id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"classification\": \"string\",\n      \"is_active\": true,\n      \"user_role\": \"WORKER\",\n      \"trade\": \"string\",\n      \"phone\": \"string\",\n      \"project_job_numbers\": [\n        \"string\",\n        \"string\"\n      ],\n      \"email\": \"string\"\n    },\n    \"timecard_entries\": [\n      {\n        \"employee\": {\n          \"company_supplied_id\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"classification\": \"string\",\n          \"is_active\": false,\n          \"user_role\": \"WORKER\",\n          \"trade\": \"string\",\n          \"phone\": \"string\",\n          \"project_job_numbers\": [\n            \"string\",\n            \"string\"\n          ],\n          \"email\": \"string\"\n        },\n        \"work_components\": [\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 2613,\n            \"standard_time_minutes\": 5251,\n            \"over_time_minutes\": 7474\n          },\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 7621,\n            \"standard_time_minutes\": 135,\n            \"over_time_minutes\": 5529\n          }\n        ]\n      },\n      {\n        \"employee\": {\n          \"company_supplied_id\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"classification\": \"string\",\n          \"is_active\": true,\n          \"user_role\": \"WORKER\",\n          \"trade\": \"string\",\n          \"phone\": \"string\",\n          \"project_job_numbers\": [\n            \"string\",\n            \"string\"\n          ],\n          \"email\": \"string\"\n        },\n        \"work_components\": [\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 4312,\n            \"standard_time_minutes\": 7161,\n            \"over_time_minutes\": 6460\n          },\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 4357,\n            \"standard_time_minutes\": 757,\n            \"over_time_minutes\": 1234\n          }\n        ]\n      }\n    ]\n  },\n  {\n    \"workshift_key\": \"string\",\n    \"foreman\": {\n      \"company_supplied_id\": \"string\",\n      \"first_name\": \"string\",\n      \"last_name\": \"string\",\n      \"classification\": \"string\",\n      \"is_active\": true,\n      \"user_role\": \"ADMIN\",\n      \"trade\": \"string\",\n      \"phone\": \"string\",\n      \"project_job_numbers\": [\n        \"string\",\n        \"string\"\n      ],\n      \"email\": \"string\"\n    },\n    \"timecard_entries\": [\n      {\n        \"employee\": {\n          \"company_supplied_id\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"classification\": \"string\",\n          \"is_active\": true,\n          \"user_role\": \"OFFICE_STAFF\",\n          \"trade\": \"string\",\n          \"phone\": \"string\",\n          \"project_job_numbers\": [\n            \"string\",\n            \"string\"\n          ],\n          \"email\": \"string\"\n        },\n        \"work_components\": [\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 5238,\n            \"standard_time_minutes\": 9086,\n            \"over_time_minutes\": 2110\n          },\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 2208,\n            \"standard_time_minutes\": 2471,\n            \"over_time_minutes\": 2863\n          }\n        ]\n      },\n      {\n        \"employee\": {\n          \"company_supplied_id\": \"string\",\n          \"first_name\": \"string\",\n          \"last_name\": \"string\",\n          \"classification\": \"string\",\n          \"is_active\": true,\n          \"user_role\": \"PM\",\n          \"trade\": \"string\",\n          \"phone\": \"string\",\n          \"project_job_numbers\": [\n            \"string\",\n            \"string\"\n          ],\n          \"email\": \"string\"\n        },\n        \"work_components\": [\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 652,\n            \"standard_time_minutes\": 9663,\n            \"over_time_minutes\": 8983\n          },\n          {\n            \"cost_code\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"double_time_minutes\": 9550,\n            \"standard_time_minutes\": 8212,\n            \"over_time_minutes\": 8109\n          }\n        ]\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cfbb5fbf-9bc4-4caf-bede-c3db17ca56b8",
+          "name": "Workshift Export Request",
+          "request": {
+            "name": "Workshift Export Request",
+            "description": {
+              "content": "Post a new request to export workshift data asynchronously from Rhumbix.  Returns the new batch_key for subsequently retrieving status and results for this batch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":company_key",
+                "batch",
+                "workshift",
+                "export"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "company_key",
+                  "description": "(Required) The unique company key associated with your api key."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "x-api-key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\"\n  },\n  {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e5d449a2-b359-4147-8cae-a9c6ab46b286",
+              "name": "batch request received",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":company_key",
+                    "batch",
+                    "workshift",
+                    "export"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "company_key",
+                      "description": "(Required) The unique company key associated with your api key."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\"\n  },\n  {\n    \"start_time\": \"<dateTime>\",\n    \"end_time\": \"<dateTime>\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "string",
+                  "description": ""
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"batch_key\": \"1234abcd-56ef-gh78-ijkl-mnopqrstuvwx90\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "//async-api.rhumbix.com/V1_0_1",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a972e93a-9902-4780-ba9e-c0be8dad0ae3",
+    "name": "Rhumbix Public Batch Export API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Rhumbix API is intended for use by Rhumbix customers and partners to build integrations with the Rhumbix application. The API is designed to support regular updates and queries in batch requests. Rhumbix primarily manages data for construction workers in the field. Integrations should be aware that updates to this data will directly influence the users of the mobile and web application. For access to the API, contact your Rhumbix support representitive. Further application documentation and support can be found at https://rhumbix.desk.com/ \n## Overview\nThe usual order of operation is like this: \n1) You post data to the API with your unique company_key and x-api-key. \n2) The request is put into a queue of requests (sometimes requests are very large) and you receive back a batch_key to check the status of your request. \n3) You check the unique URL of your request using your new batch_key, your company_key and x-api-key until its status is COMPLETE. \n### Base URL \nhttps://async-api.rhumbix.com/V1_0_1\n# Authentication\nAuthentication is handled via a token system and a unique company_key. You can create a company_key and retrieve an api token key by logging in to the Rhumbix web platform. Once you have an access token, you can interact with the API by including the `x-api-key` in the header of an HTTP `GET` or `POST` request.\n```json\n{\n  \"x-api-key\": \"abcdefghijklmnopqrstuvwxyz0123456789\" \n}\n```",
+      "type": "text/plain"
+    }
+  }
+}

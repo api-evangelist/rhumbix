@@ -1,0 +1,95 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rhumbix Public Batch Export CORS API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CORS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/employee/import"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export/:batch_key/status"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export/:batch_key/results"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/project/import"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/employee/import/:batch_key/status"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        },
+        {
+          "info": {
+            "name": "Returns appropriate headers to enable CORS for cross-domain API requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "OPTIONS",
+            "url": "{{baseUrl}}/:company_key/batch/project/import/:batch_key/status"
+          },
+          "docs": "Returns appropriate headers to enable CORS for cross-domain API requests"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

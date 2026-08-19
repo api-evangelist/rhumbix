@@ -1,0 +1,102 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rhumbix Public Batch Export Batch Import API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batch Import",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Employee Batch Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/:company_key/batch/employee/import",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "The unique company key associated with your api key."
+              }
+            ]
+          },
+          "docs": "Post a new batch of employee data for import into Rhumbix. Returns a new batch_key for subsequently retrieving status updates for this batch."
+        },
+        {
+          "info": {
+            "name": "Project Batch Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/:company_key/batch/project/import",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "The unique company key associated with your api key."
+              }
+            ]
+          },
+          "docs": "Post a new batch of project data to import into Rhumbix. Returns the new batch_key for subsequently retrieving status updates for this batch."
+        },
+        {
+          "info": {
+            "name": "Employee Import Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/:company_key/batch/employee/import/:batch_key/status",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_key",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the processing status of a employee import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is \"Complete\", the 'employees' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record i"
+        },
+        {
+          "info": {
+            "name": "Project Import Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/:company_key/batch/project/import/:batch_key/status",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_key",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the processing status of a project import batch using the batch_key value that was returned when the batch was created.  After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously.  When the returned status is \"Complete\", the 'projects' property will contain a status, by id, of each item requested to be imported.  The status field on each item will indicate whether the item was UPDATED (merged into existing record in "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

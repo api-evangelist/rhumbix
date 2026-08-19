@@ -1,0 +1,83 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rhumbix Public Batch Export API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batch Export",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Workshift Batch Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export/:batch_key/status",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_key",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the processing status of a workshift export batch using the batch_key value that was returned when the batch was created.  After creating a new export batch, you should poll this endpoint to monitor the status as your batch is processed asynchronously.  When the returned status is \"Complete\", retrieve your exported data by calling the export results method."
+        },
+        {
+          "info": {
+            "name": "Workshift Batch Results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export/:batch_key/results",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "batch_key",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the results of a completed workshift export batch.  You should poll the export status for this batch until it returns a status of \"COMPLETE\" before trying to retrieve these results."
+        },
+        {
+          "info": {
+            "name": "Workshift Export Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{{baseUrl}}/:company_key/batch/workshift/export",
+            "params": [
+              {
+                "name": "company_key",
+                "value": "",
+                "type": "path",
+                "description": "The unique company key associated with your api key."
+              }
+            ]
+          },
+          "docs": "Post a new request to export workshift data asynchronously from Rhumbix.  Returns the new batch_key for subsequently retrieving status and results for this batch."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
