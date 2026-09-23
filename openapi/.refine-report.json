@@ -1,9 +1,7 @@
 {
   "provider": "rhumbix",
   "sources": [
-    "rhumbix-batch-export-api-openapi.yml",
-    "rhumbix-batch-import-api-openapi.yml",
-    "rhumbix-cors-api-openapi.yml"
+    "_original/rhumbix-public-api-openapi-original.json"
   ],
   "outputs": [
     "rhumbix-batch-export-api-openapi.yml",
@@ -13,6 +11,14 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "rhumbix-public-api-openapi-original.json: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "rhumbix-batch-export-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rhumbix-batch-import-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "rhumbix-cors-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
