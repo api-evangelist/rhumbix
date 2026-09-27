@@ -324,6 +324,21 @@ paths:
         required: true
 components:
   schemas:
+    Workshift:
+      type: object
+      properties:
+        workshift_key:
+          type: string
+        foreman:
+          $ref: '#/components/schemas/Employee'
+        timecard_entries:
+          items:
+            $ref: '#/components/schemas/TimecardEntry'
+          type: array
+      title: Workshift
+    BatchKey:
+      type: string
+      title: BatchKey
     CostCode:
       type: object
       properties:
@@ -336,16 +351,31 @@ components:
         project_job_number:
           type: string
       title: CostCode
-    TimecardEntry:
+    WorkComponents:
       type: object
       properties:
-        employee:
-          $ref: '#/components/schemas/Employee'
-        work_components:
-          items:
-            $ref: '#/components/schemas/WorkComponents'
-          type: array
-      title: TimecardEntry
+        cost_code:
+          $ref: '#/components/schemas/CostCode'
+        double_time_minutes:
+          type: integer
+        standard_time_minutes:
+          type: integer
+        over_time_minutes:
+          type: integer
+      title: WorkComponents
+    WorkshiftQuery:
+      required:
+      - start_time
+      - end_time
+      type: object
+      properties:
+        start_time:
+          type: string
+          format: dateTime
+        end_time:
+          type: string
+          format: dateTime
+      title: WorkshiftQuery
     Employee:
       required:
       - company_supplied_id
@@ -381,34 +411,6 @@ components:
         email:
           type: string
       title: Employee
-    BatchKey:
-      type: string
-      title: BatchKey
-    WorkshiftQuery:
-      required:
-      - start_time
-      - end_time
-      type: object
-      properties:
-        start_time:
-          type: string
-          format: dateTime
-        end_time:
-          type: string
-          format: dateTime
-      title: WorkshiftQuery
-    WorkComponents:
-      type: object
-      properties:
-        cost_code:
-          $ref: '#/components/schemas/CostCode'
-        double_time_minutes:
-          type: integer
-        standard_time_minutes:
-          type: integer
-        over_time_minutes:
-          type: integer
-      title: WorkComponents
     BatchStatus:
       enum:
       - NOT_FOUND
@@ -418,18 +420,16 @@ components:
       - ERROR
       type: string
       title: BatchStatus
-    Workshift:
+    TimecardEntry:
       type: object
       properties:
-        workshift_key:
-          type: string
-        foreman:
+        employee:
           $ref: '#/components/schemas/Employee'
-        timecard_entries:
+        work_components:
           items:
-            $ref: '#/components/schemas/TimecardEntry'
+            $ref: '#/components/schemas/WorkComponents'
           type: array
-      title: Workshift
+      title: TimecardEntry
   securitySchemes:
     api_key:
       in: header

@@ -383,6 +383,54 @@ paths:
       description: Retrieve the processing status of a project import batch using the batch_key value that was returned when the batch was created. After creating a new import batch, you should poll this endpoint to monitor the status as your batch is processed asynchornously. When the returned status is "Complete", the 'projects' property will contain a status, by id, of each item requested to be imported. The status field on each item will indicate whether the item was UPDATED (merged into existing record in Rhumbix), CREATED (new record created in Rhumbix), or ERROR (check the 'details' property for more information on why the record was not created nor imported). It is possible for some records to be created/updated succssfully while others fail. Check the status on each row to ensure that every record was imported successfully or to handle errors appopriately.
 components:
   schemas:
+    EmployeeImportStatus:
+      title: EmployeeImportStatus
+      required:
+      - company_supplied_id
+      properties:
+        company_supplied_id:
+          type: string
+      allOf:
+      - $ref: '#/components/schemas/ImportStatus'
+      - type: object
+    BatchKey:
+      type: string
+      title: BatchKey
+    Employee:
+      required:
+      - company_supplied_id
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_supplied_id:
+          type: string
+          description: Unique id for each employee
+        classification:
+          type: string
+        is_active:
+          type: boolean
+        user_role:
+          enum:
+          - ADMIN
+          - FOREMAN
+          - PM
+          - WORKER
+          - OFFICE_STAFF
+          type: string
+        trade:
+          type: string
+        phone:
+          type: string
+        project_job_numbers:
+          items:
+            type: string
+          type: array
+        email:
+          type: string
+      title: Employee
     Project:
       required:
       - job_number
@@ -436,44 +484,15 @@ components:
       allOf:
       - $ref: '#/components/schemas/ImportStatus'
       - type: object
-    Employee:
-      required:
-      - company_supplied_id
-      type: object
-      properties:
-        first_name:
-          type: string
-        last_name:
-          type: string
-        company_supplied_id:
-          type: string
-          description: Unique id for each employee
-        classification:
-          type: string
-        is_active:
-          type: boolean
-        user_role:
-          enum:
-          - ADMIN
-          - FOREMAN
-          - PM
-          - WORKER
-          - OFFICE_STAFF
-          type: string
-        trade:
-          type: string
-        phone:
-          type: string
-        project_job_numbers:
-          items:
-            type: string
-          type: array
-        email:
-          type: string
-      title: Employee
-    BatchKey:
+    BatchStatus:
+      enum:
+      - NOT_FOUND
+      - ACCEPTED
+      - PROCESSING
+      - COMPLETE
+      - ERROR
       type: string
-      title: BatchKey
+      title: BatchStatus
     ImportStatus:
       required:
       - status
@@ -487,25 +506,6 @@ components:
           type: string
         detail:
           type: string
-    EmployeeImportStatus:
-      title: EmployeeImportStatus
-      required:
-      - company_supplied_id
-      properties:
-        company_supplied_id:
-          type: string
-      allOf:
-      - $ref: '#/components/schemas/ImportStatus'
-      - type: object
-    BatchStatus:
-      enum:
-      - NOT_FOUND
-      - ACCEPTED
-      - PROCESSING
-      - COMPLETE
-      - ERROR
-      type: string
-      title: BatchStatus
   securitySchemes:
     api_key:
       in: header
